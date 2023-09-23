@@ -27,7 +27,7 @@ class DBStorage:
             "Place": Place,
             "Review": Review
         }
-    __tables = ["State", "City", "User"]
+    __tables = ["State", "City", "User", "Place"]
 
     def __init__(self):
         """initialisation instance method"""
