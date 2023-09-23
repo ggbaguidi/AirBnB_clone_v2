@@ -3,11 +3,22 @@
 import os
 import models
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from models.city import City
 from models.user import User
 from models.amenity import Amenity
 from sqlalchemy.orm import relationship
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'),
+                             primary_key=True,
+                             nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True,
+                             nullable=False)
+                      )
 
 
 class Place(BaseModel, Base):
@@ -26,14 +37,20 @@ class Place(BaseModel, Base):
     amenity_ids = []
 
     reviews = relationship("Review", cascade="all, delete", backref="place")
+    amenities = relationship(
+            "Amenity",
+            secondary="place_amenity",
+            viewonly=False)
 
     if os.getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def reviews(self):
-            """Review"""
+            """Returns respective list of reviews"""
+            all_reviews = models.storage.all(models.review.Review)
+            return list(filter((lambda c: c.place_id == self.id), all_reviews))
 
-            l_reviews = [
-                    v for _, v in models.storage.all("Review").items()
-                    if self.id == v.place_id
-                ]
-            return l_reviews
+        @property
+        def amenities(self):
+            """Returns respective list of reviews"""
+            amenities = models.storage.all(models.amenity.Amenity)
+            return list(filter((lambda c: c.place_id == self.id), amenities))

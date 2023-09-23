@@ -14,10 +14,6 @@ class State(BaseModel, Base):
 
     if not os.getenv("HBNB_TYPE_STORAGE") != "db":
         @property
-        def create(self):
-            """getter attribute cities"""
-            s = []
-            for _, val in models.storagege.all(City).items():
-                if val.state_id == State.id:
-                    s.append(val)
-            return s
+        def cities(self):
+            all_cities = list(models.storage.all(City).values())
+            return list(filter((lambda c: c.state_id == self.id), all_cities))
