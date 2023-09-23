@@ -35,22 +35,35 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
+    __reviews = relationship("Review", cascade="all, delete", backref="place")
+    __amenities = relationship(
+        "Amenity",
+        secondary=place_amenity,
+        backref="place",
+        viewonly=False
+    )
 
-    reviews = relationship("Review", cascade="all, delete", backref="place")
-    amenities = relationship(
-            "Amenity",
-            secondary="place_amenity",
-            viewonly=False)
+    @property
+    def reviews(self):
+        """get all refiews with the current place id
+        from filestorage
+        """
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            return self.__reviews
+        list = [
+            v for k, v in models.storage.all(models.Review).items()
+            if v.place_id == self.id
+        ]
+        return (list)
 
-    if os.getenv("HBNB_TYPE_STORAGE") != "db":
-        @property
-        def reviews(self):
-            """Returns respective list of reviews"""
-            all_reviews = models.storage.all(models.review.Review)
-            return list(filter((lambda c: c.place_id == self.id), all_reviews))
-
-        @property
-        def amenities(self):
-            """Returns respective list of reviews"""
-            amenities = models.storage.all(models.amenity.Amenity)
-            return list(filter((lambda c: c.place_id == self.id), amenities))
+    @property
+    def amenities(self):
+        """get all amenities with the current place id
+        """
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            return self.__amenities
+        list = [
+            v for k, v in models.storage.all(models.Amenity).items()
+            if v.id in self.amenity_ids
+        ]
+        return (list)
