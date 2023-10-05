@@ -6,12 +6,12 @@ from fabric.api import env, put, run
 env.hosts = ["107.23.95.21", "34.204.81.3"]
 
 
-def do_pack(archive_path):
+def do_deploy(archive_path):
     """
     Write a Fabric script (based on the file 1-pack_web_static.py)
     that distributes an archive to your web servers
     """
-    if not os.path.isFile(archive_path):
+    if not os.path.isfile(archive_path):
         return False
     file = archive_path.split("/")[-1]
     name = file.split(".")[0]
