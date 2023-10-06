@@ -29,37 +29,30 @@ def do_pack():
         return None
     return file_name
 
+
 def do_deploy(archive_path):
     """
-    Write a Fabric script (based on the file 1-pack_web_static.py)
-    that distributes an archive to your web servers
+    - Upload the archive to the /tmp/ directory of the web server
+    - iUncompress the archive to the folder /data/web_static/releases/<archive
+    filename without extension> on the web server
+    - Delete the archive from the web server
+    - Delete the symbolic link /data/web_static/current from the web server
+    - Create a new the symbolic link /data/web_static/current on the web
+    server, linked to the new version of your code
+    (/data/web_static/releases/<archive filename without extension>)
     """
-    if not os.path.isfile(archive_path):
-        return False
-    file_path = archive_path.split("/")
-    dir_ = "/".join(file_path[:-1])
-    file_name = file_path[-1].split(".")[0]
-    if put(archive_path, "/tmp/{}.tgz".format(file_name)).failed:
-        return False
-    if run("mkdir -p /data/web_static/releases/{}/"
-            .format(file_name)).failed:
-        return False
-    if run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
-            .format(file_name, file_name)).failed:
-        return False
-    if run("rm /tmp/{}.tgz".format(file_name)).failed:
-        return False
-    if run("rm -rf /data/web_static/current").failed:
-        return False
-    if run("mv /data/web_static/releases/{}/web_static/*\
-             /data/web_static/releases/{}/"
-            .format(file_name, file_name)).failed:
-        return False
-    if run("rm -rf /data/web_static/releases/{}/web_static"
-            .format(file_name)).failed:
-        return False
-    if run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
-            .format(file_name)).failed:
-        return False
-    print("New version deployed!")
+    if not (os.path.exists(archive_path)):
+            return False
+    archive_name = archive_path.split('/')[1]
+    archive_name_without_ext = archive_path.split('/')[1].split('.')[0]
+    release_path = '/data/web_static/releases/' + archive_name_without_ext
+    upload_path = '/tmp/' + archive_name
+    put(archive_path, upload_path)
+    run('mkdir -p ' + release_path)
+    run('tar -xzf ' + upload_path + ' -C ' + release_path)
+    run('rm ' + upload_path)
+    run('mv ' + release_path + '/web_static/* ' + release_path + '/')
+    run('rm -rf ' + release_path + '/web_static')
+    run('rm -rf /data/web_static/current')
+    run('ln -s ' + release_path + ' /data/web_static/current')
     return True
