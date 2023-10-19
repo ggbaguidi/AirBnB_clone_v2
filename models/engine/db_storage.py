@@ -90,4 +90,4 @@ class DBStorage:
 
     def close(self):
         """Add a public method """
-        self.__session.remove()
+        self.__session.close()
