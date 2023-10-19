@@ -10,11 +10,9 @@ from flask import Flask
 
 app = Flask(__name__)
 
-app.route("/", strict_slashes=False)
-def hello():
-    """
-     Hello Flask!
-    """
+@app.route('/')
+def hello_world():
+    """Hello Flask!"""
     return "Hello HBNB!"
 
 if __name__ == "__main__":
