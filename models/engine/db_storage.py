@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 """DBStorage"""
 import os
-from sqlalchemy import (
-        create_engine,
-        inspect)
+from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.engine.url import URL
 from models.base_model import Base
@@ -89,3 +87,7 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(
                 sessionmaker(bind=self.__engine, expire_on_commit=False))()
+
+    def close(self):
+        """Add a public method """
+        self.__session.remove()
