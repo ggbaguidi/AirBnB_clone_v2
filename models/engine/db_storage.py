@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """DBStorage"""
 import os
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.engine.url import URL
 from models.base_model import Base
@@ -60,7 +60,7 @@ class DBStorage:
             for row in cls_records:
                 records[cls.__class__.__name__ + "." + row.id] = row
 
-            return (records)
+            return records
         for cls_, v in self.__classes.items():
             if cls_ in self.__tables:
                 cls_records = self.__session.query(v).all()
