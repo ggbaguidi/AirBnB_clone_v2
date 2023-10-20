@@ -37,8 +37,7 @@ def states_list_route():
 
 @app.teardown_appcontext
 def app_teardown(arg=None):
-    """Clean-up session
-    """
+    """Clean-up session"""
     storage.close()
 
 
