@@ -6,7 +6,6 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from models.city import City
 from models.user import User
-from models.amenity import Amenity
 from sqlalchemy.orm import relationship
 
 place_amenity = Table('place_amenity', Base.metadata,
@@ -50,11 +49,11 @@ class Place(BaseModel, Base):
         """
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             return self.__reviews
-        list = [
+        _list = [
             v for k, v in models.storage.all(models.Review).items()
             if v.place_id == self.id
         ]
-        return (list)
+        return (_list)
 
     @property
     def amenities(self):
@@ -62,8 +61,8 @@ class Place(BaseModel, Base):
         """
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             return self.__amenities
-        list = [
+        _list = [
             v for k, v in models.storage.all(models.Amenity).items()
             if v.id in self.amenity_ids
         ]
-        return (list)
+        return (_list)
