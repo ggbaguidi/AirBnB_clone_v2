@@ -82,7 +82,12 @@ class TestConsole(unittest.TestCase):
     def test_console_create_with_params(self):
         """test create command with params"""
         with patch("sys.stdout", new=StringIO()) as output:
-            self.console.onecmd('create Place city_id="0001" user_id="0001" name="My_little_house" number_rooms=4 number_bathrooms=2 max_guest=10 price_by_night=300 latitude=37.773972 longitude=-122.431297')
+            self.console.onecmd('create Place city_id="0001" user_id="0001"\
+                                name="My_little_house" number_rooms=4 \
+                                number_bathrooms=2 \
+                                max_guest=10 price_by_night=300 \
+                                latitude=37.773972 \
+                                longitude=-122.431297')
             _id = output.getvalue().strip()
             self.assertEqual(36, len(_id))
         with patch("sys.stdout", new=StringIO()) as output:
