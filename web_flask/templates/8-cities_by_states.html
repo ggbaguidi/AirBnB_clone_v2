@@ -11,7 +11,7 @@
                 {{ state.id|e }}: <B>{{ state.name|e }}</B>
                 <UL>
                 {% for city in state.cities|sort(attribute="name") %}
-                    <LI>{{ city.id|e }}: {{ city.name|e }}</LI>
+                    <LI>{{ city.id|e }}: <B>{{ city.name|e }}</B></LI>
                 {% endfor %}
                 </UL>
             </LI>
