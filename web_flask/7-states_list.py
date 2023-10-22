@@ -31,13 +31,14 @@ app = Flask(__name__)
 def states_list_route():
     """display a HTML page: (inside the tag BODY)"""
     states = storage.all(State)
-    sorted_states = sorted(states.values(), key=lambda state: state.name)
-    return render_template("7-states_list.html", states=sorted_states)
+    return render_template("7-states_list.html", states=states.values())
 
 
 @app.teardown_appcontext
 def app_teardown(arg=None):
     """Clean-up session"""
+    if arg:
+        pass
     storage.close()
 
 
