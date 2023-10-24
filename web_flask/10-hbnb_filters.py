@@ -61,4 +61,4 @@ def app_teardown(args=None):
 
 
 if __name__ == "__main__":
-    app.run(debug=1, host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000)
