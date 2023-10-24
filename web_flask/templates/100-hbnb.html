@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<HTML lang="en">
+	<HEAD>
+		<TITLE>AirBnB clone</TITLE>
+
+		<LINK rel="shortcut icon" href="../static/images/icon.ico" >
+
+		<LINK rel="stylesheet" href="../static/styles/4-common.css"/>
+		<LINK rel="stylesheet" href="../static/styles/3-header.css"/>
+		<LINK rel="stylesheet" href="../static/styles/3-footer.css"/>
+		<LINK rel="stylesheet" href="../static/styles/6-filters.css"/>
+		<LINK rel="stylesheet" href="../static/styles/8-places.css"/>
+    </HEAD>
+    <BODY>
+		<HEADER>
+			<DIV id="HEADER_logo"></DIV>
+		</HEADER>
+		<DIV class="container">
+			<SECTION class="filters">
+				<BUTTON>Search</BUTTON>
+				<DIV class="locations">
+					<H3>States</H3>
+					<H4>&nbsp;</H4>
+					<UL class="popover">
+					{% for state in states.values()|sort(attribute='name') %}
+						<LI><H2>{{ state.name }}</H2>
+							<UL>
+                            {% for city in state.cities|sort(attribute='name') %}
+								<LI><H4>{{ city.name }}</H4></LI>
+                            {% endfor %}
+							</UL>
+                        </LI>
+                    {% endfor %}
+					</UL>
+				</DIV>
+				<DIV class="filter_amenities">
+					<H3>Amenities</H3>
+					<H4>&nbsp;</H4>
+					<UL class="popover">
+					{% for amenity in amenities.values()|sort(attribute='name') %}
+						<LI><H4>{{ amenity.name }}</H4></LI>
+					{% endfor %}
+					</UL>
+				</DIV>
+
+			</SECTION>
+			<SECTION class="places">
+				<H1>Places</H1>
+				{% for place in places.values()|sort(attribute='name') %}
+				<ARTICLE>
+					<DIV class="headline">
+						<H2>{{ place.name }}</H2>
+						<DIV class="price_by_night">${{ place.price_by_night }}</DIV>
+					</DIV>
+					<DIV class="information">
+						<DIV class="max_guest">
+							<DIV class="guest_icon"></DIV>
+							{% if place.max_guest > 1 %}
+								<P>{{ place.max_guest }} Guests</P>
+							{% else %}
+								<P>{{ place.max_guest }} Guest</P>
+							{% endif %}
+						</DIV>
+						<DIV class="number_rooms">
+							<DIV class="bed_icon"></DIV>
+							{% if place.number_rooms > 1 %}
+								<P>{{ place.number_rooms }} Bedrooms</P>
+							{% else %}
+								<P>{{ place.number_rooms }} Bedroom</P>
+							{% endif %}
+						</DIV>
+						 <DIV class="number_bathrooms">
+							<DIV class="bath_icon"></DIV>
+							{% if place.number_bathrooms > 1 %}
+								<P>{{ place.number_bathrooms }} Bathrooms</P>
+							{% else %}
+								<P>{{ place.number_bathrooms }} Bathroom</P>
+							{% endif %}
+						</DIV>
+					</DIV>
+					<DIV class="user"><b>Owner</b>: {{ place.user.first_name }} {{ place.user.last_name }}</DIV>
+					<DIV class="description">
+					{% autoescape false %}
+						{{ place.description }}
+						{% endautoescape %}
+                    </DIV>
+				</ARTICLE>
+				{% endfor %}
+			</SECTION>
+		</DIV>
+		<FOOTER>
+			<P>Holberton School</P>
+		</FOOTER>
+	</BODY>
+</HTML>
