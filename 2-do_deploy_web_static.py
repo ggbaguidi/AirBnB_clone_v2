@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from fabric.api import env, put, run, local
 
-env.hosts = ["107.23.95.21", "34.204.81.3"]
+env.hosts = ["52.3.255.199", "54.144.154.232"]
 DIR_ = "versions"
 
 
